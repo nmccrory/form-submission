@@ -9,8 +9,8 @@ var app = express();
 app.use(express.static(path.join(__dirname, './static')));
 
 //setting up view files
-app.use('views', path.join(__dirname, './views'));
-app.use('view engine', 'ejs');
+app.set('views', path.join(__dirname, './views'));
+app.set('view engine', 'ejs');
 
 //root rendering rout
 app.get('/', function(req,res){
@@ -27,6 +27,8 @@ var io = require('socket.io').listen(server);
 io.sockets.on('connection',function(socket){
 	console.log('heres where our sockets start');
 
-	socket.on('form_submit',)
+	socket.on('posting_form',function(data){
+		socket.emit('updated_message', data);
+	})
 })
 

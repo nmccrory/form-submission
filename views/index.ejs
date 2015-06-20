@@ -1,22 +1,33 @@
 <html>
 	<head>
 		<title></title>
+		<link rel="stylesheet" href="/stylesheets/styles.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script type ="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type='text/javascript'>
 
 			$(document).ready(function(){
 				var socket = io.connect();
-
+				$('.info').hide();
 				$('button').click(function(){
 					var name = $('#name').val();
 					var location = $('#location').val();
 					var language = $('#language').val();
 					var comment = $('#comment').val();
 
-					socket.emit('form_submit', {name: name, location: location, language: language, comment: comment});
+					socket.emit('posting_form', {name: name, location: location, language: language, comment: comment});
+					console.log('form submitted by client');
 				})
-
+				socket.on('updated_message', function(data){
+					function getRandomInt(min, max) {
+					  return Math.floor(Math.random() * (max - min)) + min;
+					}
+					var rand = getRandomInt(0,1000);
+					console.log('here we get our data', data);
+					$('.info').show();
+					$('.info').append('<p>You emitted the following data: '+'<br>'+'Name: '+data.name+'<br>'+'Location: '+data.location+'<br>'+'Language: '+data.language+'<br>'+'Comment: '+data.comment+'</p><br>');
+					$('.info p').append('Your lucky number is: '+ rand);
+				})
 			})
 		</script>
 	</head>
